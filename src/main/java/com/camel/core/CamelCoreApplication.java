@@ -1,5 +1,6 @@
 package com.camel.core;
 
+import com.camel.core.bean.MoveFileBean;
 import com.camel.core.util.UtilRunCamel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
