@@ -1,2 +1,2 @@
-# camel-core
-Exemplos Camel Core
+# Exemplos para estudos utilizando Spring Boot e Apache Camel Core
+## Instruções
