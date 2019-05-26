@@ -2,9 +2,12 @@ package com.camel.core;
 
 import com.camel.core.bean.MoveFileBean;
 import com.camel.core.util.UtilRunCamel;
+import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -31,6 +34,14 @@ public class CamelCoreApplication {
 		List<Object> listaRoutes = new ArrayList<>();
 		listaRoutes.add(new MoveFileBean());
 		util.runContextCamel(listaRoutes,2000);
+	}
+
+	@Bean
+	ServletRegistrationBean servletRegistrationBean() {
+		final ServletRegistrationBean servlet = new ServletRegistrationBean(
+				new CamelHttpTransportServlet(), "/*");
+		servlet.setName("CamelServlet");
+		return servlet;
 	}
 
 }
