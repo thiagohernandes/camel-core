@@ -29,7 +29,7 @@ public class CamelCoreApplication {
 	private void init() throws Exception {
 		List<Object> listaRoutes = new ArrayList<>();
 		listaRoutes.add(new MoveFileBean());
-		util.runContextCamel(listaRoutes);
+		util.runContextCamel(listaRoutes,2000);
 	}
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class UtilRunCamel {
 
-    public void runContextCamel(List<Object> listRoutes) throws Exception {
+    public void runContextCamel(List<Object> listRoutes, int timeMilisegundos) throws Exception {
         CamelContext ctx = new DefaultCamelContext();
         listRoutes.stream().forEach(i -> {
             try {
@@ -26,7 +26,7 @@ public class UtilRunCamel {
             }
         });
         ctx.start();
-        Thread.sleep(2000);
+        Thread.sleep(timeMilisegundos);
         ctx.stop();
     }
 }
