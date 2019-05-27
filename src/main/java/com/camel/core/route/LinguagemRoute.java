@@ -1,13 +1,19 @@
 package com.camel.core.route;
 
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.camel.core.bean.LinguagensMountBean;
 import com.camel.core.domain.Linguagem;
+import com.camel.core.predicate.CustomPredicates;
+import com.camel.core.predicate.ErrorField;
+import com.camel.core.util.UtilRunCamel;
 import com.camel.core.validation.ValidationGenericController;
 
 /*
@@ -19,7 +25,14 @@ import com.camel.core.validation.ValidationGenericController;
 @Component
 public class LinguagemRoute extends RouteBuilder {
 
-    @Override
+	@Autowired
+	CustomPredicates customPredicates;
+	
+	@Autowired
+	UtilRunCamel util;
+	
+    @SuppressWarnings("unchecked")
+	@Override
     public void configure() {
         restConfiguration()
                 .component("servlet")
@@ -33,6 +46,9 @@ public class LinguagemRoute extends RouteBuilder {
         
         rest("/api-linguagem")
         	.get("/all").to("direct:all-linguagens");
+        
+        rest("/api-linguagem")
+    		.get("/predicate").to("direct:predicate-ex");
 
         from("direct:linguagem-teste")
                 .process(new Processor() {
@@ -66,6 +82,26 @@ public class LinguagemRoute extends RouteBuilder {
 	        })
 	    	.log("${body}");
         
+        from("direct:predicate-ex")
+    		.bean(LinguagensMountBean.class, "montaDTOLinguagens")
+    		.doTry()
+    			.choice()
+    				.when(customPredicates.getSimulacaoPredicate())
+	    				.process(new Processor() {
+	    		            @Override
+	    		            public void process(Exchange exchange) throws Exception {
+	    		               log.info("---> Log Predicate: " + exchange.getProperty("lista").toString());
+	    		            }
+	    		        })
+	    			.otherwise()
+		    			.process(new Processor() {
+	    		            @Override
+	    		            public void process(Exchange exchange) throws Exception {
+	    		            	log.info("---> Lista erros: " + util.converErrorListToString((List<ErrorField>) exchange.getProperty("Erros")));
+	    		            }
+	    		        })
+        		.end()
+        	.endDoTry();
         
     }
 }
