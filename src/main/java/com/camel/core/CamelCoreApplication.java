@@ -36,8 +36,10 @@ public class CamelCoreApplication {
 		util.runContextCamel(listaRoutes,2000);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Bean
 	ServletRegistrationBean servletRegistrationBean() {
+		@SuppressWarnings("unchecked")
 		final ServletRegistrationBean servlet = new ServletRegistrationBean(
 				new CamelHttpTransportServlet(), "/*");
 		servlet.setName("CamelServlet");
