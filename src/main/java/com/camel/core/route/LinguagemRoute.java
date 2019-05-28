@@ -49,7 +49,10 @@ public class LinguagemRoute extends RouteBuilder {
         
         rest("/api-linguagem")
     		.get("/predicate").to("direct:predicate-ex");
-
+        
+        rest("/api-linguagem")
+			.get("/jetty").to("direct:jetty-http");
+        
         from("direct:linguagem-teste")
                 .process(new Processor() {
                     @Override
@@ -102,6 +105,24 @@ public class LinguagemRoute extends RouteBuilder {
 	    		        })
         		.end()
         	.endDoTry();
+        
+        from("jetty://http://localhost:8082/teste")
+    	.process(new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+               log.info("---> Log 8082");
+            }
+        })
+    	.log("${body}");
+        
+        from("direct:jetty-http")
+    	.process(new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+               log.info("---> Log HTTP");
+            }
+        }).to("jetty://http://localhost:8082/teste?bridgeEndpoint=true")
+    	.log("${body}");
         
     }
 }
