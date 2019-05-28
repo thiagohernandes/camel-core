@@ -2,9 +2,13 @@ package com.camel.core.route;
 
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +37,7 @@ public class LinguagemRoute extends RouteBuilder {
 	
     @SuppressWarnings("unchecked")
 	@Override
-    public void configure() {
+    public void configure() throws JAXBException {
         restConfiguration()
                 .component("servlet")
                 .bindingMode(RestBindingMode.auto);
@@ -85,8 +89,12 @@ public class LinguagemRoute extends RouteBuilder {
 	        })
 	    	.log("${body}");
         
+        JAXBContext context = JAXBContext.newInstance(new Class[]{Linguagem.class}); 
+        JaxbDataFormat jaxbFormat = new JaxbDataFormat(context); 
+        
         from("direct:predicate-ex")
     		.bean(LinguagensMountBean.class, "montaDTOLinguagens")
+    		.unmarshal(jaxbFormat)
     		.doTry()
     			.choice()
     				.when(customPredicates.getSimulacaoPredicate())
