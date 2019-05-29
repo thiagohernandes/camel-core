@@ -29,21 +29,21 @@ public class CamelCoreApplication {
 		SpringApplication.run(CamelCoreApplication.class, args);
 	}
 
-	@PostConstruct
-	private void init() throws Exception {
-		List<Object> listaRoutes = new ArrayList<>();
-		listaRoutes.add(new MoveFileBean());
-		util.runContextCamel(listaRoutes,2000);
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Bean
-	ServletRegistrationBean servletRegistrationBean() {
-		@SuppressWarnings("unchecked")
-		final ServletRegistrationBean servlet = new ServletRegistrationBean(
-				new CamelHttpTransportServlet(), "/*");
-		servlet.setName("CamelServlet");
-		return servlet;
-	}
+//	@PostConstruct
+//	private void init() throws Exception {
+//		List<Object> listaRoutes = new ArrayList<>();
+//		listaRoutes.add(new MoveFileBean());
+//		util.runContextCamel(listaRoutes,2000);
+//	}
+//
+//	@SuppressWarnings("rawtypes")
+//	@Bean
+//	ServletRegistrationBean servletRegistrationBean() {
+//		@SuppressWarnings("unchecked")
+//		final ServletRegistrationBean servlet = new ServletRegistrationBean(
+//				new CamelHttpTransportServlet(), "/*");
+//		servlet.setName("CamelServlet");
+//		return servlet;
+//	}
 
 }
