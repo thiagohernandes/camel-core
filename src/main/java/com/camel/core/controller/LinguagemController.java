@@ -1,5 +1,7 @@
 package com.camel.core.controller;
 
+import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,8 @@ public class LinguagemController {
 	LinguagemService service;
 	
 	@GetMapping(value = "/all", produces = MediaType.APPLICATION_XML_VALUE)
-	public LinguagensDTOXML getAllLinguagensXML() {
+	public LinguagensDTOXML getAllLinguagensXML() throws JAXBException {
+		service.XMLToString();
 		return service.getAllLinguagensXML();
 	}
 	
