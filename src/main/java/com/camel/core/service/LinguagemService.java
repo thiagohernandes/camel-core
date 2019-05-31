@@ -1,12 +1,15 @@
 package com.camel.core.service;
 
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.Marshaller;
 
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.stereotype.Service;
 
 import com.camel.core.domain.Linguagem;
@@ -34,6 +37,19 @@ public class LinguagemService {
     	lista.getLinguagens().stream().forEach(i -> System.out.println(i.getNome()));
     }
     
+    public String XMLToString(LinguagensDTOXML xml) throws JAXBException {
+    	JAXBContext jc = JAXBContext.newInstance(LinguagensDTOXML.class);
+        Marshaller marshaller = jc.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        StringWriter sw = new StringWriter();
+        marshaller.marshal(xml, sw);
+       return sw.toString();
+    }
+    
+    public void XMLToJSON(String dadosXML) throws Exception {
+    	JSONObject paisesJson = XML.toJSONObject(dadosXML.toString());
+        System.out.println(paisesJson.toString());
+    }    
 
     public Linguagem getJava(){
         return new Linguagem(1, "Java");
