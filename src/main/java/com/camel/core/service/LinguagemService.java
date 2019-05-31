@@ -47,8 +47,8 @@ public class LinguagemService {
     }
     
     public void XMLToJSON(String dadosXML) throws Exception {
-    	JSONObject paisesJson = XML.toJSONObject(dadosXML.toString());
-        System.out.println(paisesJson.toString());
+    	JSONObject parser = XML.toJSONObject(dadosXML.toString());
+        System.out.println(parser.toString());
     }    
 
     public Linguagem getJava(){
